@@ -12,7 +12,7 @@ const Token = require("../models/Token");
 const register = async (req, res) => {
   const { email } = req.body;
   const isExistEmail = await User.findOne({ email });
-  if (isExistEmail) throw new BadRequestError("Email already exists");
+  if (isExistEmail) throw new BadRequestError("Email hiện đã tồn tại!");
   const isFirstUser = (await User.countDocuments({})) === 0;
   if (isFirstUser) {
     req.body.role = "admin";
@@ -27,14 +27,14 @@ const register = async (req, res) => {
   //   verificationToken,
   //   origin,
   // });
-  res.status(StatusCodes.CREATED).json({ message: "Register successfully" });
+  res.status(StatusCodes.CREATED).json({ message: "Đăng ký thành công!" });
 };
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw new BadRequestError(`Email is invalid`);
+  if (!user) throw new BadRequestError(`Email không hợp lệ!`);
   const isMatchPWD = await user.comparePWD(password);
-  if (!isMatchPWD) throw new BadRequestError(`Password is invalid`);
+  if (!isMatchPWD) throw new BadRequestError(`Password không hợp lệ!`);
   const tokenUser = createTokenUser(user);
   if (!user.isVerified) {
     const origin = "http://localhost:4000";
@@ -45,7 +45,7 @@ const login = async (req, res) => {
       origin,
     });
     throw new UnauthenticatedError(
-      "Please verify your email to continue login in system"
+      "Xin vui lòng xác nhận email để có thể đăng nhập vào hệ thông!"
     );
   }
   let refreshToken = "";
@@ -53,7 +53,7 @@ const login = async (req, res) => {
   if (existingToken) {
     const { isValid } = existingToken;
     if (!isValid) {
-      throw new UnauthenticatedError("Invalid Credentials");
+      throw new UnauthenticatedError("Đăng nhập không thành công");
     }
     refreshToken = existingToken.refreshToken;
     attachCookiesResponse({ res, tokenUser, refreshToken });
@@ -71,21 +71,21 @@ const login = async (req, res) => {
 const verifyEmail = async (req, res) => {
   const { verificationToken, email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw new UnauthenticatedError(`Verification Failed`);
+  if (!user) throw new UnauthenticatedError(`Xác minh email thất bại!`);
   if (user.verificationToken !== verificationToken) {
-    throw new UnauthenticatedError("Verification failed");
+    throw new UnauthenticatedError("Xác minh email thất bại!");
   }
   user.isVerified = true;
   user.verified = Date.now();
   user.verificationToken = "";
   await user.save();
-  res.status(StatusCodes.OK).json({ message: "Email verified" });
+  res.status(StatusCodes.OK).json({ message: "Xác minh email thành công!" });
 };
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
-  if (!user) throw new UnauthenticatedError("Confirm email failed");
+  if (!user) throw new UnauthenticatedError("Xác minh email thành công!");
   const origin = "http://localhost:3000";
   const passwordToken = crypto.randomBytes(70).toString("hex");
   await sendResetPasswordEmail({
@@ -101,16 +101,16 @@ const forgotPassword = async (req, res) => {
   await user.save();
   res
     .status(StatusCodes.OK)
-    .json({ message: "Please check your email for reset password link" });
+    .json({ message: "Vui lòng kiểm tra email của bạn để đặt lại mật khẩu của bạn!" });
 };
 
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body;
   if (!token || !email) {
-    throw new BadRequestError("Please provide token and email");
+    throw new BadRequestError("Xin hay vui lòng cung cấp mã token(code) and email");
   }
   if (password.length < 6) {
-    throw new BadRequestError("Password must be at least 6 characters");
+    throw new BadRequestError("Passowrd cần ít nhất là 6 kí tự");
   }
   const user = await User.findOne({ email });
   if (user) {
@@ -125,7 +125,7 @@ const resetPassword = async (req, res) => {
       await user.save();
     }
   }
-  return res.status(200).json({ message: "Reset password successfully" });
+  return res.status(200).json({ message: "Đặt lại mật khẩu thành công!" });
 };
 
 const logout = async (req, res) => {
@@ -138,7 +138,7 @@ const logout = async (req, res) => {
     httpOnly: true,
     expires: new Date(Date.now() + 1000),
   });
-  res.status(StatusCodes.OK).json({ message: "logout successfully" });
+  res.status(StatusCodes.OK).json({ message: "Đăng xuất thành công!" });
 };
 // entire user [testing]
 module.exports = {

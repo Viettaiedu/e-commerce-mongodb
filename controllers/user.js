@@ -14,52 +14,52 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
   const { id: userId } = req.params;
   const user = await User.findOne({ _id: userId }).select("-password");
-  if (!user) throw new NotFoundError(`User with id ${userId} not found`);
+  if (!user) throw new NotFoundError(`Không tìm thấy người dùng với id ${userId}`);
   res.status(StatusCodes.OK).json({ user });
 };
-const updateUser = async (req, res) => {
-  const {
-    body: { email, name },
-    userInfo: { userId },
-  } = req;
-  if (!email || !name) {
-    throw new BadRequestError("Please provide all values");
-  }
-  const user = await User.findOne({ _id: userId }).select("-password");
-  const isExstingEmail = await User.findOne({ email });
-  if (isExstingEmail) {
-    if (isExstingEmail.email === email) {
-      throw new BadRequestError("new email same as old email");
-    }
-    throw new BadRequestError("Email already in use");
-  }
-  user.email = email;
-  user.name = name;
-  await user.save();
-  const tokenUser = createTokenUser(user);
-  attachCookiesResponse({ res, tokenUser });
-  res.status(StatusCodes.OK).json({ user: tokenUser });
-};
+// const updateUser = async (req, res) => {
+//   const {
+//     body: { email, name },
+//     userInfo: { userId },
+//   } = req;
+//   if (!email || !name) {
+//     throw new BadRequestError("Vui lòng cung cấp đầy đủ thông tin!");
+//   }
+//   const user = await User.findOne({ _id: userId }).select("-password");
+//   const isExstingEmail = await User.findOne({ email });
+//   if (isExstingEmail) {
+//     if (isExstingEmail.email === email) {
+//       throw new BadRequestError("new email same as old email");
+//     }
+//     throw new BadRequestError("Email already in use");
+//   }
+//   user.email = email;
+//   user.name = name;
+//   await user.save();
+//   const tokenUser = createTokenUser(user);
+//   attachCookiesResponse({ res, tokenUser });
+//   res.status(StatusCodes.OK).json({ user: tokenUser });
+// };
 const updateUserPassword = async (req, res) => {
   const {
     body: { newPassword, oldPassword },
     userInfo: { userId },
   } = req;
   if (!newPassword || !oldPassword) {
-    throw new BadRequestError("Please provide oldPassword and newPassword");
+    throw new BadRequestError("Vui lòng cung cấp mật khẩu cũ và mật khẩu mới.");
   }
   const user = await User.findOne({ _id: userId });
   const isMatch = await user.comparePWD(oldPassword);
   if (!isMatch) {
-    throw new UnauthenticatedError("Invalid credentials");
+    throw new UnauthenticatedError("Thông tin không hợp lệ!");
   }
   const isSamePW = await user.comparePWD(newPassword);
   if (isSamePW) {
-    throw new BadRequestError("New password same as old password");
+    throw new BadRequestError("Password cũ giống Password mới, vui lòng cung cấp lại!");
   }
   user.password = newPassword;
   await user.save();
-  res.status(StatusCodes.OK).json({ message: "Update password successfully" });
+  res.status(StatusCodes.OK).json({ message: "Đặt lại mật khẩu thành công." });
 };
 
 const showCurrentUser = async (req, res) => {
@@ -72,7 +72,7 @@ const showCurrentUser = async (req, res) => {
 module.exports = {
   getAllUsers,
   getSingleUser,
-  updateUser,
+  // updateUser,
   updateUserPassword,
   showCurrentUser,
 };

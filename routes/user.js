@@ -7,7 +7,7 @@ const {
   showCurrentUser,
 } = require("../controllers/user");
 const {authenticateUser ,authorizePermession} = require('../middleware/authentication');
-router.route("/updateUser").patch(authenticateUser,updateUser);
+// router.route("/updateUser").patch(authenticateUser,updateUser);
 router.route("/updateUserPassword").patch(authenticateUser,updateUserPassword);
 router.route("/show-me").get(authenticateUser,showCurrentUser);
 router.route("").get(authenticateUser, authorizePermession('admin'),getAllUsers);

@@ -21,16 +21,16 @@ const { authenticateUser } = require("../middleware/authentication");
  *        properties:
  *          id:
  *            type: string
- *            description: The auto-generated id of the Auth
+ *            description: ID sẽ được tạo tự động
  *          name:
  *            type: string
- *            description: Your name
+ *            description: Tên của bạn
  *          email:
  *            type: string
- *            description: Your email
+ *            description: Email của bạn
  *          password:
  *            type: string
- *            description: Your password
+ *            description: Mật khẩu của bạn
  *        example:
  *          name: "tai viet"
  *          email: "viettaixca123@gmail.com"
@@ -51,7 +51,7 @@ router.route("/login").post(login);
  * @swagger
  * /api/v1/auth/login:
  *  post:
- *    summary: Login a user
+ *    summary: Người dùng đăng nhập
  *    tags: [Auth]
  *    requestBody:
  *      required: true
@@ -60,21 +60,21 @@ router.route("/login").post(login);
  *          schema:
  *            $ref: '#/components/schemas/Auth'
  *          example:
- *            email: "your email"
- *            password: "your password"
+ *            email: "your_email"
+ *            password: "your_password"
  *    responses:
  *      200:
- *        description: Login in successful  
+ *        description: Đăng nhập thành công 
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'  
  *      400:
- *        description: Email or password is not valid
+ *        description: Email và password không hợp lệ.
  *      401:
- *        description: Authentication failed
+ *        description: Xác thực thất bại
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi server
  */
 
 // --------REGISTER----------
@@ -83,7 +83,7 @@ router.route("/register").post(register);
  * @swagger
  * /api/v1/auth/register:
  *  post:
- *    summary: Create a new user
+ *    summary: Tạo mới một người dùng
  *    tags: [Auth]
  *    requestBody:
  *      required: true
@@ -97,15 +97,15 @@ router.route("/register").post(register);
  *              password: "your_password"
  *    responses:
  *      201:
- *        description: The user was created successfully and check your email to verify it
+ *        description: Bạn đã tạo thành công.
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'  
  *      400:
- *        description: Email is existing
+ *        description: Email hiện đã tồn tại
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi Server
  */
 
 
@@ -115,19 +115,19 @@ router.route("/logout").post(authenticateUser, logout);
  * @swagger
  * /api/v1/auth/logout:
  *  post:
- *    summary: Logout from system
+ *    summary: Đăng xuất khỏi hệ thống
  *    tags: [Auth]
  *    responses:
  *      200:
- *        description: Logout successfully
+ *        description: Đăng xuất thành công
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'
  *      401:
- *        description: Authentication invalid
+ *        description: Xác thực không hợp lệ
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi Server
  */
 
 // --------VERIFY EMAIL----------
@@ -136,7 +136,7 @@ router.route("/verify-email").post(verifyEmail);
  * @swagger
  * /api/v1/auth/verify-email:
  *  post:
- *    summary: Verify email
+ *    summary: Xác minh email
  *    tags: [Auth]
  *    requestBody:
  *      required: true
@@ -145,19 +145,19 @@ router.route("/verify-email").post(verifyEmail);
  *            schema:
  *              $ref: '#/components/schemas/Auth'
  *            example:
- *              verificationToken: "your code"
+ *              verificationToken: "your_code"
  *              email: "your_email"
  *    responses:
  *      200:
- *        description: Verified successfully
+ *        description: Xác minh email thành công
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'  
  *      401:
- *        description: Authentication Failed
+ *        description: Xác minh thất bại
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi Server
  */
 
 // --------FORGOT PASSWORD----------
@@ -166,7 +166,7 @@ router.route("/forgot-password").post(forgotPassword);
  * @swagger
  * /api/v1/auth/forgot-password:
  *  post:
- *    summary: Forgot password
+ *    summary: Quên mật khẩu
  *    tags: [Auth]
  *    requestBody:
  *      required: true
@@ -178,15 +178,15 @@ router.route("/forgot-password").post(forgotPassword);
  *              email: "your_email"
  *    responses:
  *      200:
- *        description: forgot successfully
+ *        description: Quên mật khẩu thành công
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'  
  *      400:
- *        description: Email is not existing
+ *        description: Email không hiện tồn tại.
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi Server
  */
 
 // --------RESET PASSWORD----------
@@ -195,7 +195,7 @@ router.route("/reset-password").post(resetPassword);
  * @swagger
  * /api/v1/auth/reset-password:
  *  post:
- *    summary: reset password
+ *    summary: Đặt lại mật khẩu
  *    tags: [Auth]
  *    requestBody:
  *      required: true
@@ -204,19 +204,19 @@ router.route("/reset-password").post(resetPassword);
  *            schema:
  *              $ref: '#/components/schemas/Auth'
  *            example:
- *              token: "your code"
- *              email: "your email"
- *              password: "your new password"
+ *              token: "your_code"
+ *              email: "your_email"
+ *              password: "your_new_password"
  *    responses:
  *      200:
- *        description: reset successfully
+ *        description: Đặt lại mật khẩu thành công
  *        content:  
  *          application/json:  
  *            schema:  
  *              #ref: '#/components/schemas/Auth'  
  *      400:
- *        description: Email or code or password is invalid
+ *        description: Email hoặc mã code hoặc password không hợp lệ
  *      500:
- *        description: Something went wrong
+ *        description: Lỗi Server
  */
 module.exports = router;

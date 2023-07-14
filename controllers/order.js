@@ -20,7 +20,7 @@ const getSingleOrder = async (req, res) => {
     params: { id: orderId },
   } = req;
   const order = await Order.findOne({ _id: orderId });
-  if (!order) throw new NotFoundError(`No item with id ${orderId}`);
+  if (!order) throw new NotFoundError(`Không thể tìm thấy sản phẩm với 'id ${orderId}'`);
   checkPermission({ userInfo: req.userInfo, userId: order.createdByUserId });
   res.status(StatusCodes.OK).json({ order });
 };
@@ -30,16 +30,16 @@ const createOrder = async (req, res) => {
     userInfo: { userId },
   } = req;
   if (!items || items.length <= 0)
-    throw new BadRequestError("Please provide at least one item");
+    throw new BadRequestError("Vui lòng cung cấp ít nhất là 1 sản phẩm!");
   if (!tax || !shippingFee) {
-    throw new BadRequestError("Please provide tax and shipping fee");
+    throw new BadRequestError("Vui lòng cung cấp thuế và phí ship hàng!");
   }
   let subTotal = 0;
   let orderItems = [];
   for (const item of items) {
     const product = await Product.findOne({ _id: item.productId });
     if (!product) {
-      throw new NotFoundError(`No item with id ${item.productId}`);
+      throw new NotFoundError(`Không thể tìm thấy sản phẩm với 'id ${item.productId}'`);
     }
     const singleItem = {
       name: product.name,
@@ -67,11 +67,11 @@ const deleteOrder = async (req, res) => {
     userInfo: { userId },
   } = req;
   const order = await Order.findOne({ _id: orderId });
-  if (!order) throw new NotFoundError(`Not item with id ${orderId}`);
+  if (!order) throw new NotFoundError(`Không thể tìm thấy sản phẩm với 'id ${orderId}'`);
   checkPermission({ userInfo: req.userInfo, userId: order.createdByUserId });
   res
     .status(StatusCodes.OK)
-    .json({ message: `Delete order with id ${orderId} successfully` });
+    .json({ message: `Xóa đặt hàng với id ${orderId} thành công` });
 };
 const updateOrder = async (req, res) => {
   const {
@@ -79,14 +79,14 @@ const updateOrder = async (req, res) => {
     params: { id: orderId },
   } = req;
   const order = await Order.findOne({ _id: orderId });
-  if (!order) throw new NotFoundError(`Not item with id ${orderId}`);
+  if (!order) throw new NotFoundError(`Không tìm thấy sản phẩm với id ${orderId}`);
   checkPermission({ userInfo: req.userInfo, userId: order.createdByUserId });
   if (!paymentIntendId)
-    throw new BadRequestError(`Please provide paymentIntendId`);
+    throw new BadRequestError(`Vui lòng cung cấp paymentIntendId`);
   order.paymentIntendId = paymentIntendId;
   order.status = "paid";
   await order.save();
-  res.status(StatusCodes.OK).json({ message: `Update successfully` });
+  res.status(StatusCodes.OK).json({ message: `Cập nhật thành công!` });
 };
 
 const getCurrentUserOrders = async (req, res) => {

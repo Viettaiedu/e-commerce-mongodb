@@ -14,14 +14,14 @@ const getAllReviews = async (req, res) => {
 const getSingleReview = async (req, res) => {
   const { id: reviewId } = req.params;
   const review = await Review.findOne({ _id: reviewId });
-  if (!review) throw new NotFoundError(`No item with id ${reviewId}`);
+  if (!review) throw new NotFoundError(`Không tìm thấy review của id ${reviewId}`);
   res.status(StatusCodes.OK).json({ review });
 };
 const createReview = async (req, res) => {
   const { productId } = req.body;
   const isProductExisting = await Product.findOne({ _id: productId });
   if (!isProductExisting)
-    throw new NotFoundError(`No item with id ${productId}`);
+    throw new NotFoundError(`Không tìm thấy review của sản phẩm có id ${productId}`);
   req.body.createdByUserId = req.userInfo.userId;
   const review = await Review.create({ ...req.body });
   res.status(StatusCodes.CREATED).json({ review });
@@ -32,10 +32,10 @@ const updateReview = async (req, res) => {
     body: { title },
   } = req;
   if (!title) {
-    throw new BadRequestError("Please provide title for this review");
+    throw new BadRequestError("Vui lòng cung cấp title cho review này!");
   }
   const isReview = await Review.findOne({ _id: rewiewId });
-  if (!isReview) throw new NotFoundError(`No review with id ${rewiewId}`);
+  if (!isReview) throw new NotFoundError(`Không tìm thấy review với id ${rewiewId}`);
   checkPermission({ userInfo: req.userInfo, userId: isReview.createdByUserId });
   const review = await Review.findByIdAndUpdate(
     { _id: rewiewId, createdByUserId: req.userInfo.userId },
@@ -53,12 +53,12 @@ const deleteReview = async (req, res) => {
     userInfo: { userId },
   } = req;
   const isReview = await Review.findOne({ _id: rewiewId });
-  if (!isReview) throw new NotFoundError(`No review with id ${rewiewId}`);
+  if (!isReview) throw new NotFoundError(`Không tìm thấy review với id ${rewiewId}`);
   checkPermission({ userInfo: req.userInfo, userId: isReview.createdByUserId });
   await Review.deleteOne({ _id: rewiewId, createdByUserId: userId });
   res
     .status(StatusCodes.OK)
-    .json({ message: `Delete review with id ${rewiewId} successfully` });
+    .json({ message: `Xóa review với id ${rewiewId} thành công` });
 };
 
 const getSingleProductReviews = async (req, res) => {

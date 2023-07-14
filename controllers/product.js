@@ -112,14 +112,14 @@ const getSingleProduct = async (req, res) => {
   const { id: productId } = req.params;
   const product = await Product.findOne({ _id: productId });
   if (!product) {
-    throw new NotFoundError(`No item with id ${productId} not found`);
+    throw new NotFoundError(`Không tìm thấy sản phẩm với id ${productId}`);
   }
   res.status(StatusCodes.OK).json({ product });
 };
 const createProduct = async (req, res) => {
   const { name, price, category, company } = req.body;
   if (!name || !price || !category || !company) {
-    throw new BadRequestError("Please provide all values");
+    throw new BadRequestError("Vui lòng cung cấp (name, price, category, company)");
   }
   req.body.createdByUser = req.userInfo.userId;
   const product = await Product.create({ ...req.body });
@@ -133,23 +133,23 @@ const updateProduct = async (req, res) => {
     { new: true, runValidators: true }
   );
 
-  if (!product) throw new NotFoundError(`No item with id ${productId} `);
+  if (!product) throw new NotFoundError(`Không tìm thấy sản phẩm với id ${productId} `);
   res.status(StatusCodes.OK).json({ product });
 };
 const deleteProduct = async (req, res) => {
   const { id: productId } = req.params;
   const product = await Product.findOneAndDelete({ _id: productId });
-  if (!product) throw new NotFoundError(`No item with id ${productId} `);
+  if (!product) throw new NotFoundError(`Không tìm thấy sản phẩm với id ${productId} `);
   res
     .status(StatusCodes.OK)
-    .json({ message: `Delete product with id ${productId} successfully` });
+    .json({ message: `Xóa sản phẩm với id ${productId} thành công!` });
 };
 
 const uploadImage = async (req, res) => {
   const { id: productId } = req.params;
-  if (!req.file) throw new BadRequestError("Please provide a file");
+  if (!req.file) throw new BadRequestError("Vui lòng cung cấp file!");
   const product = await Product.findOne({ _id: productId });
-  if (!product) throw new NotFoundError(`No item with id ${productId}`);
+  if (!product) throw new NotFoundError(`Không tìm thấy sản phẩm với id ${productId}`);
   product.image = path.join(
     __dirname,
     "../public/uploads/" + req.file.filename
@@ -157,7 +157,7 @@ const uploadImage = async (req, res) => {
   await product.save();
   res
     .status(StatusCodes.OK)
-    .json({ product, message: "Update product successfully" });
+    .json({ product, message: "Cập nhật ảnh thành công" });
 };
 module.exports = {
   getAllProducts,
