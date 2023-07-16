@@ -17,8 +17,8 @@ const register = async (req, res) => {
   if (isFirstUser) {
     req.body.role = "admin";
   }
-  // const verificationToken = crypto.randomBytes(40).toString("hex");
-  // req.body.verificationToken = verificationToken;
+  const verificationToken = crypto.randomBytes(40).toString("hex");
+  req.body.verificationToken = verificationToken;
   const user = await User.create({ ...req.body });
   // const origin = "http://localhost:4000";
   // await sendVerificationEmail({

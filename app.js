@@ -14,10 +14,9 @@ const mongoSanitize = require("express-mongo-sanitize");
 const morgan = require("morgan");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
-const options = require('./docs/swagger');
+const options = require("./docs/swagger");
 //connectDB
 const connectDB = require("./db/connect");
-
 app.use(
   rateLimiter({
     windowMs: 15 * 1000 * 60,

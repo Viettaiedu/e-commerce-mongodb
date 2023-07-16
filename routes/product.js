@@ -2,6 +2,7 @@ const router = require("express").Router();
 
 const {
   getAllProducts,
+  getAllProductsStatic,
   getSingleProduct,
   createProduct,
   updateProduct,
@@ -13,9 +14,17 @@ const {
   authenticateUser,
   authorizePermession,
 } = require("../middleware/authentication");
+
+
+
+
+
+router.get("/static", getAllProductsStatic);
+
+
+router.get("", getAllProducts);
 router
   .route("")
-  .get(getAllProducts)
   .post(authenticateUser, authorizePermession("admin"), createProduct);
 router
   .route("/:id")
