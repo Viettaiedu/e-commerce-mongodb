@@ -3,6 +3,7 @@ const login = {
   tags: ["Auth"],
   requestBody: {
     required: true,
+    description: "Đây là tài khoản admin tôi đã được xác minh email",
     content: {
       "application/json": {
         schema: {
@@ -10,8 +11,8 @@ const login = {
           required: true,
         },
         example: {
-          email: "Your_email",
-          password: "Your_password",
+          email: "viettaii2003@gmail.com",
+          password: "123123",
         },
       },
     },

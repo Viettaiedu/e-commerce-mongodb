@@ -3,6 +3,8 @@ const register = {
   tags: ["Auth"],
   requestBody: {
     required: true,
+    description:
+      "Đăng ký tài khoản, vui lòng thử email thật để có thể xác minh email, còn nếu không bạn có thể sử dụng tài khoản này vd (email:viettaii2003@gmail.com,password:123123) đây là tài khoản admin",
     content: {
       "application/json": {
         schema: {

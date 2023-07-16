@@ -3,6 +3,7 @@ const resetPassword = {
   tags: ["Auth"],
   requestBody: {
     required: true,
+    description: "Đặt lại mật khẩu",
     content: {
       "application/json": {
         schema: {

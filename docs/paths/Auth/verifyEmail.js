@@ -3,6 +3,7 @@ const verifyEmail = {
   tags: ["Auth"],
   requestBody: {
     required: true,
+    description: "Xác minh tài khoản",
     content: {
       "application/json": {
         schema: {
