@@ -1,3 +1,3 @@
-const tags = [ require("./Auth")];
+const tags = [require("./Product"), require("./Auth")];
 
 module.exports = tags;
