@@ -14,9 +14,9 @@ const mongoSanitize = require("express-mongo-sanitize");
 const morgan = require("morgan");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
+const options = require('./docs/swagger');
 //connectDB
 const connectDB = require("./db/connect");
-
 
 app.use(
   rateLimiter({
@@ -40,31 +40,15 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(cookieParser());
 
-
 // routes
 const routerAuth = require("./routes/auth");
 const routerUser = require("./routes/user");
 const routerProduct = require("./routes/product");
 const routerReview = require("./routes/review");
 const routerOrder = require("./routes/order");
-const options = {
-	definition: {
-		openapi: "3.0.0",
-		info: {
-			title: "E-Commerce API",
-			version: "1.0.0",
-			description: "API Thương mại điện tử",
-		},
-		servers: [
-			{
-				url: "http://localhost:4000",
-			},
-		],
-	},
-	apis: ["./routes/*.js"],
-};
 
 const specs = swaggerJsDoc(options);
+
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use("/api/v1/auth", routerAuth);
 app.use("/api/v1/users", routerUser);
