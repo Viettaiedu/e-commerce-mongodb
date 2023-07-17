@@ -15,7 +15,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000/api/v1",
+        url: "https://viettai-ecommerce-api-mongodb.vercel.app",
         description: "Local server",
       },
     ],
