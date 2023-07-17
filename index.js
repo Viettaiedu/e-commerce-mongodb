@@ -15,6 +15,8 @@ const morgan = require("morgan");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 const options = require("./docs/swagger");
+const pathToSwaggerUi = require("swagger-ui-dist").absolutePath();
+app.use(express.static(pathToSwaggerUi));
 //connectDB
 const connectDB = require("./db/connect");
 app.use(
@@ -47,8 +49,15 @@ const routerReview = require("./routes/review");
 const routerOrder = require("./routes/order");
 
 const specs = swaggerJsDoc(options);
-
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(specs, {
+    customCssUrl: [
+      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/5.1.1/swagger-ui.css",
+    ],
+  })
+);
 app.use("/api/v1/auth", routerAuth);
 app.use("/api/v1/users", routerUser);
 app.use("/api/v1/products", routerProduct);
