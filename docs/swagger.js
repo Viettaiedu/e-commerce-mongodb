@@ -15,8 +15,8 @@ const options = {
     },
     servers: [
       {
-        url: "https://viettai-ecommerce-api-mongodb.vercel.app",
-        description: "Local server",
+        url: "https://viettai-ecommerce-api-mongodb.vercel.app/api/v1",
+        description: "Server",
       },
     ],
     paths: paths,
