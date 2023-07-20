@@ -6,8 +6,8 @@ const createHash = require("../utils/createHash");
 const createTokenUser = require("../utils/createTokenUser");
 const sendVerificationEmail = require("../utils/sendVerification");
 const sendResetPasswordEmail = require("../utils/sendResetPasswordEmail");
-const crypto = require("crypto");
 const Token = require("../models/Token");
+const { generateToken } = require("../utils/generateToken");
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -17,7 +17,7 @@ const register = async (req, res) => {
   if (isFirstUser) {
     req.body.role = "admin";
   }
-  const verificationToken = crypto.randomBytes(40).toString("hex");
+  const verificationToken = generateToken();
   req.body.verificationToken = verificationToken;
   const user = await User.create({ ...req.body });
   // const origin = "http://localhost:4000";
@@ -33,7 +33,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) throw new BadRequestError(`Email không hợp lệ!`);
-  const isMatchPWD = await user.comparePWD(password);
+  const isMatchPWD = await comparePWD(password, user.password);
   if (!isMatchPWD) throw new BadRequestError(`Password không hợp lệ!`);
   const tokenUser = createTokenUser(user);
   if (!user.isVerified) {
@@ -60,7 +60,7 @@ const login = async (req, res) => {
     res.status(StatusCodes.OK).json({ user: tokenUser });
     return;
   }
-  refreshToken = crypto.randomBytes(40).toString("hex");
+  refreshToken = generateToken();
   const userAgent = req.headers["user-agent"];
   const ip = req.ip;
   const userToken = { refreshToken, ip, userAgent, userId: user._id };
@@ -87,7 +87,7 @@ const forgotPassword = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) throw new UnauthenticatedError("Xác minh email thành công!");
   const origin = "http://localhost:3000";
-  const passwordToken = crypto.randomBytes(70).toString("hex");
+  const passwordToken = generateToken();
   await sendResetPasswordEmail({
     name: user.name,
     email: user.email,
@@ -99,15 +99,17 @@ const forgotPassword = async (req, res) => {
   user.passwordToken = createHash(passwordToken);
   user.passwordTokenExpirationDate = passwordTokenExpirationDate;
   await user.save();
-  res
-    .status(StatusCodes.OK)
-    .json({ message: "Vui lòng kiểm tra email của bạn để đặt lại mật khẩu của bạn!" });
+  res.status(StatusCodes.OK).json({
+    message: "Vui lòng kiểm tra email của bạn để đặt lại mật khẩu của bạn!",
+  });
 };
 
 const resetPassword = async (req, res) => {
   const { token, email, password } = req.body;
   if (!token || !email) {
-    throw new BadRequestError("Xin hay vui lòng cung cấp mã token(code) and email");
+    throw new BadRequestError(
+      "Xin hay vui lòng cung cấp mã token(code) and email"
+    );
   }
   if (password.length < 6) {
     throw new BadRequestError("Passowrd cần ít nhất là 6 kí tự");
