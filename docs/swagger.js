@@ -13,6 +13,7 @@ const options = {
         email: "viettaixca123@gmail.com",
       },
     },
+    schemes: ["https"],
     servers: [
       {
         url: "https://viettai-ecommerce-api-mongodb.vercel.app/api/v1",
