@@ -16,7 +16,7 @@ const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 const options = require("./docs/swagger");
 const pathToSwaggerUi = require("swagger-ui-dist").absolutePath();
-app.use(express.static(pathToSwaggerUi));
+
 //connectDB
 const connectDB = require("./db/connect");
 app.use(
@@ -28,10 +28,11 @@ app.use(
 app.use(xss());
 app.use(
   cors({
-    origin: "https://viettai-api-ecommerce.vercel.app",
+    origin: "https://viettai-api-ecommerce.vercel.app/",
     credentials: true,
   })
 );
+app.use(express.static(pathToSwaggerUi));
 if (process.env.NODE_ENV === "production") {
   app.use(morgan("dev"));
 }

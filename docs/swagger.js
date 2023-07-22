@@ -10,13 +10,13 @@ const options = {
       description: "API Thương mại điện tử",
       contact: {
         name: "Viết Tàii",
-        email: "https://www.facebook.com/taixca.viet",
+        email: "viettaii2003@gmail.com",
       },
     },
     schemes: ["https"],
     servers: [
       {
-        url: "https://viettai-ecommerce-api-mongodb.vercel.app/api/v1",
+        url: "https://viettai-api-ecommerce.vercel.app/api/v1",
         description: "Server",
       },
     ],
