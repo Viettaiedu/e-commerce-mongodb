@@ -13,13 +13,7 @@ const options = {
         email: "viettaii2003@gmail.com",
       },
     },
-    schemes: ["https"],
-    servers: [
-      {
-        url: "https://viettai-api-ecommerce.vercel.app/api/v1",
-        description: "Server",
-      },
-    ],
+    servers: [{ url: "https://viettai-api-ecommerce.vercel.app/api/v1" }],
     paths: paths,
     tags: tags,
     components: components,

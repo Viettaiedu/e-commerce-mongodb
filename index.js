@@ -28,7 +28,7 @@ app.use(
 app.use(xss());
 app.use(
   cors({
-    origin: "https://viettai-api-ecommerce.vercel.app/",
+    origin: "https://viettai-api-ecommerce.vercel.app",
     credentials: true,
   })
 );
