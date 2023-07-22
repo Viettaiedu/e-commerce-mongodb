@@ -9,8 +9,8 @@ const options = {
       version: "1.0.0",
       description: "API Thương mại điện tử",
       contact: {
-        name: "Viết Tài",
-        email: "viettaixca123@gmail.com",
+        name: "Viết Tàii",
+        email: "https://www.facebook.com/taixca.viet",
       },
     },
     schemes: ["https"],

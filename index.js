@@ -28,7 +28,7 @@ app.use(
 app.use(xss());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://viettai-api-ecommerce.vercel.app",
     credentials: true,
   })
 );
@@ -58,6 +58,9 @@ app.use(
     ],
   })
 );
+app.get("/api-docs.json", (req, res) => {
+  res.json(specs);
+});
 app.use("/api/v1/auth", routerAuth);
 app.use("/api/v1/users", routerUser);
 app.use("/api/v1/products", routerProduct);
